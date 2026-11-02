@@ -1,0 +1,309 @@
+{
+  "manifest_version": 1,
+  "type": "device",
+  "name": "UBPet Litter Box",
+  "description": {
+    "en": "Control UBPet / UPET self-cleaning litter boxes (C20, C10...) from Gladys.",
+    "fr": "Pilotez les litières autonettoyantes UBPet / UPET (C20, C10...) depuis Gladys.",
+    "de": "Selbstreinigende UBPet / UPET Katzentoiletten (C20, C10...) mit Gladys steuern."
+  },
+  "version": "1.0.0",
+  "docker_image": "ghcr.io/stereomuff/gladys-ubpet:1.0.0",
+  "gladys_version": ">=5.1.0",
+  "categories": ["appliances"],
+  "transports": ["cloud"],
+  "config_schema": [
+    {
+      "key": "intro",
+      "type": "section",
+      "label": { "en": "Before you start", "fr": "Avant de commencer", "de": "Bevor Sie beginnen" },
+      "description": {
+        "en": "The UPET cloud allows one session per account: if Gladys uses the same account as your phone, they keep logging each other out. Create a second UPET account, share the litter box to it from the UPET app (device settings, share), and enter that second account here.",
+        "fr": "Le cloud UPET n'autorise qu'une session par compte : si Gladys utilise le même compte que votre téléphone, ils se déconnectent mutuellement. Créez un second compte UPET, partagez-lui la litière depuis l'application UPET (réglages de l'appareil, partage), et saisissez ce second compte ici.",
+        "de": "Die UPET-Cloud erlaubt nur eine Sitzung pro Konto: Nutzt Gladys dasselbe Konto wie Ihr Telefon, melden sie sich gegenseitig ab. Legen Sie ein zweites UPET-Konto an, teilen Sie die Katzentoilette in der UPET-App damit (Geräteeinstellungen, Teilen) und tragen Sie dieses zweite Konto hier ein."
+      }
+    },
+    {
+      "key": "region",
+      "type": "select",
+      "label": {
+        "en": "App edition / region",
+        "fr": "Édition de l'application / région",
+        "de": "App-Edition / Region"
+      },
+      "description": {
+        "en": "The UPET app edition the account was created in (Europe: UPET; North America: UPET-NA; Japan/Korea: UPET-ASIA).",
+        "fr": "L'édition de l'application UPET où le compte a été créé (Europe : UPET ; Amérique du Nord : UPET-NA ; Japon/Corée : UPET-ASIA).",
+        "de": "Die UPET-App-Edition, in der das Konto erstellt wurde (Europa: UPET; Nordamerika: UPET-NA; Japan/Korea: UPET-ASIA)."
+      },
+      "required": true,
+      "default": "eu",
+      "options": [
+        {
+          "value": "eu",
+          "label": {
+            "en": "UPET - Europe, UK, Turkey",
+            "fr": "UPET - Europe, Royaume-Uni, Turquie",
+            "de": "UPET - Europa, UK, Türkei"
+          }
+        },
+        {
+          "value": "na",
+          "label": {
+            "en": "UPET-NA - North America, Brazil",
+            "fr": "UPET-NA - Amérique du Nord, Brésil",
+            "de": "UPET-NA - Nordamerika, Brasilien"
+          }
+        },
+        {
+          "value": "asia",
+          "label": {
+            "en": "UPET-ASIA - Japan, South Korea",
+            "fr": "UPET-ASIA - Japon, Corée du Sud",
+            "de": "UPET-ASIA - Japan, Südkorea"
+          }
+        },
+        {
+          "value": "ru",
+          "label": { "en": "UPET - Russia", "fr": "UPET - Russie", "de": "UPET - Russland" }
+        },
+        {
+          "value": "airpet_eu",
+          "label": {
+            "en": "AIR PET app - Europe",
+            "fr": "Application AIR PET - Europe",
+            "de": "AIR PET App - Europa"
+          }
+        },
+        {
+          "value": "airpet_na",
+          "label": {
+            "en": "AIR PET app - North America",
+            "fr": "Application AIR PET - Amérique du Nord",
+            "de": "AIR PET App - Nordamerika"
+          }
+        },
+        {
+          "value": "airpet_global",
+          "label": {
+            "en": "AIR PET app - global",
+            "fr": "Application AIR PET - international",
+            "de": "AIR PET App - global"
+          }
+        }
+      ]
+    },
+    {
+      "key": "country",
+      "type": "string",
+      "label": { "en": "Country code", "fr": "Code pays", "de": "Ländercode" },
+      "description": {
+        "en": "Two-letter code of the country chosen in the UPET app (CH, FR, DE...). Leave empty if login works without it.",
+        "fr": "Code à deux lettres du pays choisi dans l'application UPET (CH, FR, DE...). Laissez vide si la connexion fonctionne sans.",
+        "de": "Zweibuchstabiger Code des in der UPET-App gewählten Landes (CH, FR, DE...). Leer lassen, wenn die Anmeldung ohne funktioniert."
+      },
+      "placeholder": { "en": "e.g. CH", "fr": "ex. FR", "de": "z. B. DE" },
+      "required": false
+    },
+    {
+      "key": "account",
+      "type": "string",
+      "label": {
+        "en": "UPET account (e-mail or phone)",
+        "fr": "Compte UPET (e-mail ou téléphone)",
+        "de": "UPET-Konto (E-Mail oder Telefon)"
+      },
+      "placeholder": {
+        "en": "gladys@example.com",
+        "fr": "gladys@exemple.fr",
+        "de": "gladys@beispiel.de"
+      },
+      "required": true
+    },
+    {
+      "key": "password",
+      "type": "secret",
+      "label": { "en": "Password", "fr": "Mot de passe", "de": "Passwort" },
+      "required": true
+    },
+    {
+      "key": "refresh_interval",
+      "type": "number",
+      "label": {
+        "en": "Cloud refresh interval (s)",
+        "fr": "Intervalle de rafraîchissement cloud (s)",
+        "de": "Cloud-Aktualisierungsintervall (s)"
+      },
+      "description": {
+        "en": "How often waste bin, deodorant and visit history are read. Box state and new visits are pushed in real time anyway.",
+        "fr": "Fréquence de lecture du bac à déchets, du désodorisant et de l'historique. L'état et les nouvelles visites arrivent de toute façon en temps réel.",
+        "de": "Wie oft Abfallbehälter, Deodorant und Besuchsverlauf gelesen werden. Zustand und neue Besuche kommen ohnehin in Echtzeit."
+      },
+      "required": false,
+      "default": 180,
+      "min": 60,
+      "max": 3600
+    },
+    {
+      "key": "advanced",
+      "type": "section",
+      "label": { "en": "Advanced", "fr": "Avancé", "de": "Erweitert" },
+      "description": {
+        "en": "Leave these empty. The integration ships the identity of the official app; fill them only if the vendor changes it and an updated value is published by the community.",
+        "fr": "Laissez ces champs vides. L'intégration embarque l'identité de l'application officielle ; ne les remplissez que si le fabricant la change et qu'une nouvelle valeur est publiée par la communauté.",
+        "de": "Leer lassen. Die Integration enthält die Kennung der offiziellen App; nur ausfüllen, wenn der Hersteller sie ändert und die Community einen neuen Wert veröffentlicht."
+      },
+      "links": [
+        {
+          "url": "https://github.com/KennebecRiver66/upet-hass-multi-region",
+          "label": {
+            "en": "Community reverse-engineering (Home Assistant)",
+            "fr": "Rétro-ingénierie communautaire (Home Assistant)",
+            "de": "Community-Reverse-Engineering (Home Assistant)"
+          }
+        }
+      ]
+    },
+    {
+      "key": "app_id",
+      "type": "string",
+      "label": {
+        "en": "App ID override",
+        "fr": "App ID (remplacement)",
+        "de": "App-ID (Überschreibung)"
+      },
+      "required": false
+    },
+    {
+      "key": "app_key",
+      "type": "secret",
+      "label": {
+        "en": "App key override",
+        "fr": "Clé d'application (remplacement)",
+        "de": "App-Schlüssel (Überschreibung)"
+      },
+      "required": false
+    },
+    {
+      "key": "product",
+      "type": "string",
+      "label": {
+        "en": "Product header override",
+        "fr": "En-tête produit (remplacement)",
+        "de": "Produkt-Header (Überschreibung)"
+      },
+      "required": false
+    }
+  ],
+  "actions": [
+    {
+      "key": "test_connection",
+      "label": {
+        "en": "Test the connection",
+        "fr": "Tester la connexion",
+        "de": "Verbindung testen"
+      },
+      "timeout_seconds": 60
+    }
+  ],
+  "scene_triggers": [
+    {
+      "key": "cat_visit",
+      "label": {
+        "en": "A cat used the litter box",
+        "fr": "Un chat a utilisé la litière",
+        "de": "Eine Katze hat die Toilette benutzt"
+      },
+      "description": {
+        "en": "Fires for every new visit the box records (a few seconds after the cat leaves).",
+        "fr": "Se déclenche à chaque nouvelle visite enregistrée (quelques secondes après la sortie du chat).",
+        "de": "Wird bei jedem neu aufgezeichneten Besuch ausgelöst (einige Sekunden nach dem Verlassen)."
+      },
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": { "en": "Litter box", "fr": "Litière", "de": "Katzentoilette" }
+        },
+        {
+          "key": "cat",
+          "type": "string",
+          "label": {
+            "en": "Cat name (as in the UPET app)",
+            "fr": "Nom du chat (comme dans l'application UPET)",
+            "de": "Name der Katze (wie in der UPET-App)"
+          }
+        }
+      ],
+      "variables": [
+        {
+          "key": "cat",
+          "type": "string",
+          "label": { "en": "Cat name", "fr": "Nom du chat", "de": "Name der Katze" }
+        },
+        {
+          "key": "weight",
+          "type": "number",
+          "label": { "en": "Weight (kg)", "fr": "Poids (kg)", "de": "Gewicht (kg)" }
+        },
+        {
+          "key": "duration",
+          "type": "number",
+          "label": { "en": "Duration (s)", "fr": "Durée (s)", "de": "Dauer (s)" }
+        }
+      ]
+    },
+    {
+      "key": "bin_full",
+      "label": {
+        "en": "Waste bin is full",
+        "fr": "Le bac à déchets est plein",
+        "de": "Abfallbehälter ist voll"
+      },
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": { "en": "Litter box", "fr": "Litière", "de": "Katzentoilette" }
+        }
+      ],
+      "variables": [
+        {
+          "key": "level",
+          "type": "number",
+          "label": { "en": "Fill level (%)", "fr": "Remplissage (%)", "de": "Füllstand (%)" }
+        }
+      ]
+    },
+    {
+      "key": "box_blocked",
+      "label": {
+        "en": "Litter box is blocked",
+        "fr": "La litière est bloquée",
+        "de": "Katzentoilette ist blockiert"
+      },
+      "description": {
+        "en": "The drum stopped on an obstacle or an error and needs a look.",
+        "fr": "Le tambour s'est arrêté sur un obstacle ou une erreur et demande une vérification.",
+        "de": "Die Trommel hat wegen eines Hindernisses oder Fehlers angehalten und muss geprüft werden."
+      },
+      "fields": [
+        {
+          "key": "device",
+          "type": "select",
+          "source": "devices",
+          "label": { "en": "Litter box", "fr": "Litière", "de": "Katzentoilette" }
+        }
+      ],
+      "variables": [
+        {
+          "key": "cause",
+          "type": "number",
+          "label": { "en": "Error code", "fr": "Code d'erreur", "de": "Fehlercode" }
+        }
+      ]
+    }
+  ]
+}
